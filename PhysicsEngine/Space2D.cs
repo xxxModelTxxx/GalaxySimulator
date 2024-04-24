@@ -1,7 +1,7 @@
 ﻿using System.Drawing;
 using System.Numerics;
 
-namespace Physics
+namespace PhysicsEngine
 {
     /// <summary>
     /// Represents 2D space (universe)
@@ -10,6 +10,7 @@ namespace Physics
     {
         public const int DefaultSpaceSizeX = 600;
         public const int DefaultSpaceSizeY = 400;
+        public const float DefaultStarGenerationProbability = 0.002f;
 
         private Size _size;
         private List<Star2D> _stars;

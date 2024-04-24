@@ -1,4 +1,4 @@
-﻿namespace Physics
+﻿namespace PhysicsEngine
 {
     /// <summary>
     /// Static class containing basic parameters to run the space simulation. 

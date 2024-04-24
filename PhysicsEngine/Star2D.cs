@@ -1,6 +1,6 @@
 ﻿using System.Numerics;
 
-namespace Physics
+namespace PhysicsEngine
 {
     /// <summary>
     /// Represents single star in 2D space.
@@ -9,7 +9,6 @@ namespace Physics
     {
         public const float DefaultStarMassMin = 0.1f;
         public const float DefaultStarMassMax = 1.0f;
-        public const float DefaultStarGenerationProbability = 0.05f;        
 
         private Vector2 _accelerationVector;
         private Vector2 _forceVector;
