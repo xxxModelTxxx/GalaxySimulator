@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System.Collections.Concurrent;
+using System.Drawing;
 using System.Numerics;
 
 namespace PhysicsEngine
@@ -10,7 +11,8 @@ namespace PhysicsEngine
     {
         public const int DefaultSpaceSizeX = 600;
         public const int DefaultSpaceSizeY = 400;
-        public const float DefaultStarGenerationProbability = 0.002f;
+        public const float DefaultStarGenerationProbability = 0.0002f; // ~50 @ 600x400
+        public const int MaximumNoOfTasks = 10;
 
         private Size _size;
         private List<Star2D> _stars;
@@ -92,26 +94,26 @@ namespace PhysicsEngine
         }
         private Vector2 CalculateResultantGravitationalForceVector(Star2D star1)
         {
-            Vector2 fResultant = Vector2.Zero;
-            Vector2 fIndividual = Vector2.Zero;
+                Vector2 fResultant = Vector2.Zero;
+                Vector2 fIndividual = Vector2.Zero;
 
-            foreach (Star2D star2 in _stars)
-            {
-                try
+                foreach (Star2D star2 in _stars)
                 {
-                    fIndividual = CalculateGravitationalForceVector(star1, star2);
+                    try
+                    {
+                        fIndividual = CalculateGravitationalForceVector(star1, star2);
+                    }
+                    catch
+                    {
+                        fIndividual = Vector2.Zero;
+                    }
+                    finally
+                    {
+                        fResultant += fIndividual;
+                    }
                 }
-                catch
-                {
-                    fIndividual = Vector2.Zero;
-                }
-                finally
-                {
-                    fResultant += fIndividual;
-                }
-            }
 
-            return fResultant;
+                return fResultant;
         }
         private void UpdateSimulationState()
         {
@@ -119,6 +121,15 @@ namespace PhysicsEngine
             {
                 star.UpdateState(PhysicalConstants.TimeStep, PhysicalConstants.LightSpeed);
             }
+        }
+        private ConcurrentQueue<int> InitializeTaskPoolPointerQueue()
+        {
+            ConcurrentQueue<int> TaskBufferQueue = new ConcurrentQueue<int>();
+            for (int i = 0; i < MaximumNoOfTasks; i++)
+            {
+                TaskBufferQueue.Enqueue(i);
+            }
+            return TaskBufferQueue;
         }
     }
 }
