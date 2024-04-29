@@ -78,9 +78,30 @@ namespace PhysicsEngine
         public void UpdateState(float time, float lightSpeed)
         {
             _accelerationVector = CalculateAccelerationVector();
-            _positionVector = CalculatePositionVector(time);
-            _velocityVector = CalculateSpeedVector(time);
-            _massRelativistic = CalculateRelativisticMass(lightSpeed);
+            _positionVector = CalculatePositionVector();
+            _velocityVector = CalculateVelocityVector();
+            _massRelativistic = CalculateRelativisticMass();
+
+            // Local functions
+            Vector2 CalculateAccelerationVector()
+            {
+                // a = F/m
+                return _forceVector / _massRelativistic;
+            }
+            Vector2 CalculatePositionVector()
+            {
+                // V = XY + V0t + 0.5at^2
+                return _positionVector + (_velocityVector * time) + (_accelerationVector * (0.5f * (float)Math.Pow(time, 2)));
+            }
+            Vector2 CalculateVelocityVector()
+            {
+                // V = V0 + at
+                return _velocityVector + (_accelerationVector * time);
+            }
+            float CalculateRelativisticMass()
+            {
+                return _massRest / (float)Math.Sqrt(1.0f - (_velocityVector.LengthSquared() / (float)Math.Pow(lightSpeed, 2)));
+            }
         }
         /// <summary>
         /// Stops movement of the star and resets it's all dynamics.
@@ -91,25 +112,7 @@ namespace PhysicsEngine
             _forceVector = Vector2.Zero;
             _velocityVector = Vector2.Zero;
         }
-        private Vector2 CalculateAccelerationVector()
-        {
-            // a = F/m
-            return _forceVector / _massRelativistic;
-        }
-        private float CalculateRelativisticMass(float lightSpeed)
-        {
-            return _massRest / (float)Math.Sqrt(1.0f - (_velocityVector.LengthSquared() / (float)Math.Pow(lightSpeed, 2)));
-        }
-        private Vector2 CalculatePositionVector(float time)
-        {
-            // V = XY + V0t + 0.5at^2
-            return _positionVector + (_velocityVector * time) + (_accelerationVector * (0.5f * (float)Math.Pow(time, 2))); 
-        }
-        private Vector2 CalculateSpeedVector(float time)
-        {
-            // V = V0 + at
-            return _velocityVector + (_accelerationVector * time); 
-        }
+
 
     }
 }
