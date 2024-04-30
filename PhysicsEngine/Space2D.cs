@@ -9,14 +9,12 @@ namespace PhysicsEngine
     /// </summary>
     public class Space2D
     {
-        public const int DefaultSpaceSizeX = 600;
-        public const int DefaultSpaceSizeY = 400;
-        public const float DefaultStarGenerationProbability = 0.0002f; // ~50 @ 600x400
-        public const int MaximumStarsBufferSize = 2;
-        public const int MaximumNoOfTasks = 10;
+        public const float          DefaultStarGenerationProbability = 0.0002f; // ~50 @ 600x400
+        public const int            MaximumStarsBufferSize = 2;
+        public const int            MaximumNoOfTasks = 10;
 
-        private Size _size;
-        private List<Star2D> _stars;
+        private Size                _size;
+        private List<Star2D>        _stars;
         private Queue<List<Star2D>> _starsOutputBuffer;
 
         /// <summary>
@@ -25,7 +23,7 @@ namespace PhysicsEngine
         /// <param name="width"> Width of space</param>
         /// <param name="height"> Height of space</param>
         /// <param name="stars"> Collection of stars</param>
-        public Space2D(int width = DefaultSpaceSizeX, int height = DefaultSpaceSizeY)
+        public Space2D(int width = PhysicalConstants.DefaultSpaceSizeX, int height = PhysicalConstants.DefaultSpaceSizeY)
         {
             _size = new Size(width, height);
             _stars = new List<Star2D>();
@@ -131,6 +129,5 @@ namespace PhysicsEngine
                 }
             }
         }
-
     }
 }

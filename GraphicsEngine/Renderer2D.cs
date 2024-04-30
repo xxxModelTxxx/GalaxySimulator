@@ -5,8 +5,8 @@ namespace GraphicsEngine
 {
     public class Renderer2D
     {
-        private Graphics _graphicInstance;
-        private Pen _penInstance;
+        private Graphics    _graphicInstance;
+        private Pen         _penInstance;
 
         public Renderer2D(Graphics graphics)
         {

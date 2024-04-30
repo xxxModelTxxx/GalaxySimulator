@@ -5,14 +5,16 @@
     /// </summary>
     public static class PhysicalConstants
     {
-        private const float DefaultGravityConstant = 1;
-        private const float DefaultLightSpeed = 100;
-        private const float DefaultTimeStep = 1;
-        private const int ModificationMultiplier = 10;
+        public const int        DefaultSpaceSizeX = 600;
+        public const int        DefaultSpaceSizeY = 400;
+        private const float     DefaultGravityConstant = 1;
+        private const float     DefaultLightSpeed = 100;
+        private const float     DefaultTimeStep = 1;
+        private const int       ModificationMultiplier = 10;
 
-        private static float _gravityConstant;
-        private static float _lightSpeed;
-        private static float _timeStep;
+        private static float    _gravityConstant;
+        private static float    _lightSpeed;
+        private static float    _timeStep;
 
         /// <summary>
         /// Returns gravity constant.

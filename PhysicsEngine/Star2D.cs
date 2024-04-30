@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using System.Drawing;
+using System.Numerics;
 
 namespace PhysicsEngine
 {
@@ -7,15 +8,15 @@ namespace PhysicsEngine
     /// </summary>
     public class Star2D
     {
-        public const float DefaultStarMassMin = 0.1f;
-        public const float DefaultStarMassMax = 1.0f;
+        public const float  DefaultStarMassMin = 0.1f;
+        public const float  DefaultStarMassMax = 1.0f;
 
-        private Vector2 _accelerationVector;
-        private Vector2 _forceVector;
-        private float _massRest;
-        private float _massRelativistic;
-        private Vector2 _positionVector;
-        private Vector2 _velocityVector;
+        private Vector2     _accelerationVector;
+        private Vector2     _forceVector;
+        private float       _massRest;
+        private float       _massRelativistic;
+        private Vector2     _positionVector;
+        private Vector2     _velocityVector;
 
         /// <summary>
         /// Constructor.
