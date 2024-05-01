@@ -1,27 +1,33 @@
 ﻿using System.Drawing;
 using System.Numerics;
+using System.Runtime.Versioning;
 
 namespace GraphicsEngine
 {
+    [SupportedOSPlatform("windows")]
     public class Renderer2D
     {
-        private Graphics    _graphicInstance;
+        private Graphics    _graphics;
         private Pen         _penInstance;
 
-        public Renderer2D(Graphics graphics)
+        public Renderer2D(Graphics graphics, int width, int height, Color color)
         {
-            _graphicInstance = graphics;
+            _graphics = InitializeGraphics(graphics, width, height, color);
             _penInstance = new Pen(Color.Red, 1.0f);
         }
 
         public void ClearGraphic()
         {
-            _graphicInstance.Clear(Color.White);
+            _graphics.Clear(Color.White);
+        }
+        public void ClearGraphic(Color color)
+        {
+            _graphics.Clear(color);
         }
         public void RenderPoint(Point point)
         {
-            _graphicInstance.DrawLine(_penInstance, point.X - 1, point.Y, point.X + 1, point.Y);
-            _graphicInstance.DrawLine(_penInstance, point.X, point.Y - 1, point.X, point.Y + 1);
+            _graphics.DrawLine(_penInstance, point.X - 1, point.Y, point.X + 1, point.Y);
+            _graphics.DrawLine(_penInstance, point.X, point.Y - 1, point.X, point.Y + 1);
         }
         public void RenderPoints(IEnumerable<Point> points)
         {
@@ -42,7 +48,15 @@ namespace GraphicsEngine
                 RenderPointFromVector(v);
             }
         }
-
+        
+        private Graphics InitializeGraphics(Graphics graphics, int width, int height, Color color)
+        {
+            _graphics = graphics;
+            _graphics.Clip.MakeEmpty();
+            _graphics.Clip.Union(new Rectangle(0, 0, width, height));
+            _graphics.Clear(color);
+            return _graphics;
+        }
         private Point ConvertVectorToPoint(Vector2 vector)
         {
             return new Point((int)vector.X, (int)vector.Y);
