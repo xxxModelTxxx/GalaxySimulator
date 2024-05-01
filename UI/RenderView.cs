@@ -19,9 +19,9 @@
             pictureBox1.Width = width;
             pictureBox1.Height = height;
             pictureBox1.Refresh();
-            this.Refresh();
+            this.RefreshRender();
         }
-        public void Redraw()
+        public void RefreshRender()
         {
             pictureBox1.Refresh();
         }

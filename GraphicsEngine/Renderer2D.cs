@@ -7,22 +7,33 @@ namespace GraphicsEngine
     [SupportedOSPlatform("windows")]
     public class Renderer2D
     {
+        public static readonly Color    DefaultBackgroundColor = Color.White;
+
+        private Color       _backgroundColor;
         private Graphics    _graphics;
         private Pen         _penInstance;
 
-        public Renderer2D(Graphics graphics, int width, int height, Color color)
+        public Renderer2D(Graphics graphics, int width, int height)
         {
-            _graphics = InitializeGraphics(graphics, width, height, color);
+            _backgroundColor = DefaultBackgroundColor;
+            _graphics = InitializeGraphics(graphics, width, height, _backgroundColor);
             _penInstance = new Pen(Color.Red, 1.0f);
         }
 
-        public void ClearGraphic()
+        public Color BackgroundColor
         {
-            _graphics.Clear(Color.White);
+            get { return _backgroundColor; }
+            set { _backgroundColor = value; }
         }
-        public void ClearGraphic(Color color)
+
+        public void ClearGraphics()
         {
-            _graphics.Clear(color);
+            _graphics.Clear(_backgroundColor);
+        }
+        public void ClearGraphics(Color color)
+        {
+            _backgroundColor = color;
+            ClearGraphics();
         }
         public void RenderPoint(Point point)
         {

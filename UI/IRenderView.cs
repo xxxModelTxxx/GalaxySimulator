@@ -4,6 +4,6 @@
     {
         Graphics    GetGraphics();
         void        SetSize(int width, int height);
-        void        Redraw();
+        void        RefreshRender();
     }
 }
