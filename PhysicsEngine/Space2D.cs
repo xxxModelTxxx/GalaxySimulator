@@ -1,5 +1,4 @@
-﻿using System.Collections.Concurrent;
-using System.Drawing;
+﻿using System.Drawing;
 using System.Numerics;
 
 namespace PhysicsEngine
@@ -20,7 +19,7 @@ namespace PhysicsEngine
         private Queue<List<Star2D>> _starsOutputBuffer;
 
         /// <summary>
-        /// Constructor
+        /// Class constructor.
         /// </summary>
         /// <param name="width"> Width of space</param>
         /// <param name="height"> Height of space</param>
@@ -46,6 +45,16 @@ namespace PhysicsEngine
         public IEnumerable<Star2D> Stars => _starsOutputBuffer.Dequeue();
 
         /// <summary>
+        /// Adds signgle star to the space.
+        /// </summary>
+        /// <param name="x">X coordinate of the star to be added.</param>
+        /// <param name="y">Y coordinate of the star to be added.</param>
+        /// <param name="mass">Mass of the star to be added.</param>
+        public void AddStar(int x, int y, float mass)
+        {
+            _stars.Add(new Star2D(x, y, mass));
+        }
+        /// <summary>
         /// Generates stars and fills the space.
         /// </summary>
         /// <param name="starGenerationProbability">Probability of generation of star in specific point of space.</param>
@@ -62,8 +71,8 @@ namespace PhysicsEngine
                 {
                     if (rnd.NextSingle() <= starGenerationProbability)
                     {
-                        m = Star2D.DefaultStarMassMin + ((Star2D.DefaultStarMassMax-Star2D.DefaultStarMassMin) * rnd.NextSingle());
-                        _stars.Add(new Star2D(w, h, m));
+                        m = massMin + ((massMax - massMin) * rnd.NextSingle());
+                        AddStar(w, h, m);
                     }
                 }
             }

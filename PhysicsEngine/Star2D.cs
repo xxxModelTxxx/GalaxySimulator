@@ -19,7 +19,7 @@ namespace PhysicsEngine
         private Vector2     _velocityVector;
 
         /// <summary>
-        /// Constructor.
+        /// Class constructor.
         /// </summary>
         /// <param name="x">Position X coordinate</param>
         /// <param name="y">Position Y coordinate</param>
@@ -76,6 +76,7 @@ namespace PhysicsEngine
         /// Calculates new position of the star including acceleration and velocity vectors.
         /// </summary>
         /// <param name="time">Time of force application.</param>
+        /// <param name="lightSpeed">Value of light speed.</param>
         public void UpdateState(float time, float lightSpeed)
         {
             _accelerationVector = CalculateAccelerationVector();
@@ -113,7 +114,5 @@ namespace PhysicsEngine
             _forceVector = Vector2.Zero;
             _velocityVector = Vector2.Zero;
         }
-
-
     }
 }

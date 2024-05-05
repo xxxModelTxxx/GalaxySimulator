@@ -29,7 +29,7 @@
         public static float TimeStep => _timeStep;
 
         /// <summary>
-        /// Constructor.
+        /// Class static constructor.
         /// </summary>
         static PhysicalConstants()
         {
