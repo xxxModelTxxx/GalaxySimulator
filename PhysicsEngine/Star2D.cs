@@ -23,15 +23,17 @@ namespace PhysicsEngine
         /// </summary>
         /// <param name="x">Position X coordinate</param>
         /// <param name="y">Position Y coordinate</param>
-        /// <param name="m">Mass</param>
-        public Star2D(int x, int y, float m = DefaultStarMassMax)
+        /// <param name="mass">Mass</param>
+        public Star2D(int x, int y, float mass = DefaultStarMassMax)
         {
             _accelerationVector = Vector2.Zero;
             _forceVector = Vector2.Zero;
-            _massRelativistic = m;
+            _massRest = mass;
+            _massRelativistic = mass;
             _velocityVector = Vector2.Zero;
             _positionVector = new Vector2(x, y);
         }
+
 
         /// <summary>
         /// Returns acceleration vector.
@@ -82,7 +84,7 @@ namespace PhysicsEngine
             _accelerationVector = CalculateAccelerationVector();
             _positionVector = CalculatePositionVector();
             _velocityVector = CalculateVelocityVector();
-            _massRelativistic = CalculateRelativisticMass();
+            _massRelativistic = CalculateRelativisticMass(_massRest, _velocityVector, lightSpeed);
 
             // Local functions
             Vector2 CalculateAccelerationVector()
@@ -100,10 +102,6 @@ namespace PhysicsEngine
                 // V = V0 + at
                 return _velocityVector + (_accelerationVector * time);
             }
-            float CalculateRelativisticMass()
-            {
-                return _massRest / (float)Math.Sqrt(1.0f - (_velocityVector.LengthSquared() / (float)Math.Pow(lightSpeed, 2)));
-            }
         }
         /// <summary>
         /// Stops movement of the star and resets it's all dynamics.
@@ -114,5 +112,14 @@ namespace PhysicsEngine
             _forceVector = Vector2.Zero;
             _velocityVector = Vector2.Zero;
         }
+        private float CalculateRelativisticMass(float mass, float velocity, float lightSpeed)
+        {
+            return mass / (float)Math.Sqrt(1.0f - ((float)Math.Pow(velocity, 2) / (float)Math.Pow(lightSpeed, 2)));
+        }
+        private float CalculateRelativisticMass(float mass, Vector2 velocityVector, float lightSpeed)
+        {
+            return mass / (float)Math.Sqrt(1.0f - (velocityVector.LengthSquared() / (float)Math.Pow(lightSpeed, 2)));
+        }
+
     }
 }

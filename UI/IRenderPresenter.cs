@@ -1,12 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using GraphicsEngine;
+using PhysicsEngine;
 
 namespace UI
 {
-    internal interface IRenderPresenter
+    public interface IRenderPresenter
     {
+        bool IsSimulationRunning { get; }
+        Renderer2D GetRenderer { get; }
+        Space2D GetSpace { get; }
+
+        void RenderSpace(Graphics graphics);
+        Task Run();
+        void Stop();
     }
 }

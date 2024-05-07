@@ -8,15 +8,9 @@ namespace PhysicsEngine
     /// </summary>
     public class Space2D
     {
-        public const int            DefaultSpaceSizeX = 600;
-        public const int            DefaultSpaceSizeY = 400;
-        public const float          DefaultStarGenerationProbability = 0.0002f; // ~50 @ 600x400
-        public const int            MaximumStarsBufferSize = 2;
-        public const int            MaximumNoOfTasks = 10;
-
         private Size                _size;
         private List<Star2D>        _stars;
-        private Queue<List<Star2D>> _starsOutputBuffer;
+        // private Queue<List<Star2D>> _starsOutputBuffer;
 
         /// <summary>
         /// Class constructor.
@@ -24,11 +18,10 @@ namespace PhysicsEngine
         /// <param name="width"> Width of space</param>
         /// <param name="height"> Height of space</param>
         /// <param name="stars"> Collection of stars</param>
-        public Space2D(int width = DefaultSpaceSizeX, int height = DefaultSpaceSizeY)
+        public Space2D(int width, int height)
         {
             _size = new Size(width, height);
             _stars = new List<Star2D>();
-            _starsOutputBuffer = new Queue<List<Star2D>>();
         }
 
         /// <summary>
@@ -42,7 +35,7 @@ namespace PhysicsEngine
         /// <summary>
         /// Returns collection of stars located in space
         /// </summary>
-        public IEnumerable<Star2D> Stars => _starsOutputBuffer.Dequeue();
+        public IEnumerable<Star2D> Stars => _stars;
 
         /// <summary>
         /// Adds signgle star to the space.
@@ -65,16 +58,27 @@ namespace PhysicsEngine
             Random rnd = new Random();
             float m;
 
+            // Iterate throuht every point of Space (w x h).
             for (int w = 0; w < _size.Width; w++)
             {
                 for (int h = 0; h < _size.Height; h++)
                 {
-                    if (rnd.NextSingle() <= starGenerationProbability)
+                    if (IsStarGenerated())
                     {
-                        m = massMin + ((massMax - massMin) * rnd.NextSingle());
+                        m = GenerateStarMass();
                         AddStar(w, h, m);
                     }
                 }
+            }
+
+            // Local functions.
+            bool IsStarGenerated()
+            {
+                return rnd.NextSingle() <= starGenerationProbability;
+            }
+            float GenerateStarMass()
+            {
+                return m = massMin + ((massMax - massMin) * rnd.NextSingle());
             }
         }
         /// <summary>
@@ -91,6 +95,7 @@ namespace PhysicsEngine
         {
             CalculateGravitationalForces();
             UpdateSimulationState();
+
 
             // Local functions
             void CalculateGravitationalForces()
@@ -127,8 +132,16 @@ namespace PhysicsEngine
                     // Local functions
                     Vector2 CalculateGravitationalForceVector(Star2D star1, Star2D star2)
                     {
-                        // F = -G * (m1*m2)/r^2 * r12norm
-                        return ((-1 * PhysicalConstants.GravityConstant * star1.Mass * star2.Mass) / Vector2.DistanceSquared(star1.PositionVector, star2.PositionVector)) * Vector2.Normalize(star1.PositionVector - star2.PositionVector);
+                        if (star1 == star2)
+                        {
+                            return Vector2.Zero;
+                        }
+                        else
+                        {
+                            // F = -G * (m1*m2)/r^2 * r12norm
+                            return ((-1 * PhysicalConstants.GravityConstant * star1.Mass * star2.Mass) / Vector2.DistanceSquared(star1.PositionVector, star2.PositionVector)) * Vector2.Normalize(star1.PositionVector - star2.PositionVector);
+
+                        }
                     }
                 }
             }

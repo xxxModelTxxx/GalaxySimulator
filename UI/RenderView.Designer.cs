@@ -40,6 +40,7 @@
             pictureBox1.Size = new Size(600, 400);
             pictureBox1.TabIndex = 0;
             pictureBox1.TabStop = false;
+            pictureBox1.Paint += pictureBox1_Paint;
             // 
             // RenderView
             // 
@@ -55,6 +56,7 @@
             SizeGripStyle = SizeGripStyle.Hide;
             Text = "Space2D";
             TopMost = true;
+            FormClosing += RenderView_FormClosing;
             Load += RenderView_Load;
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ResumeLayout(false);

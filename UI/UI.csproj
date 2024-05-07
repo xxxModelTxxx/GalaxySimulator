@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Config\Config.csproj" />
     <ProjectReference Include="..\GraphicsEngine\GraphicsEngine.csproj" />
     <ProjectReference Include="..\PhysicsEngine\PhysicsEngine.csproj" />
   </ItemGroup>

@@ -2,8 +2,9 @@
 {
     public interface IRenderView
     {
-        Graphics    GetGraphics();
-        void        SetSize(int width, int height);
-        void        RefreshRender();
+        IRenderPresenter RenderPresenter { get; }
+
+        void    SetSize(int width, int height);
+        void    RefreshRender();
     }
 }

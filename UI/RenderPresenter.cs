@@ -1,9 +1,11 @@
-﻿using GraphicsEngine;
+﻿using Config;
+using GraphicsEngine;
 using PhysicsEngine;
+
 
 namespace UI
 {
-    internal class RenderPresenter : IRenderPresenter
+    public class RenderPresenter : IRenderPresenter
     {
         private bool _isSimulationRunning;
         private Space2D _space;
@@ -13,49 +15,44 @@ namespace UI
         public RenderPresenter(IRenderView renderView)
         {
             _isSimulationRunning = false;
-            _space = InitializeSpace();
-            _renderView = InitializeRenderView(renderView);
-            _renderer = InitializeRenderer(_renderView.GetGraphics());
+            _renderView = InitializeRenderView(renderView, Param.SpaceWidth, Param.SpaceHeight);
+            _space = InitializeSpace(Param.SpaceWidth, Param.SpaceHeight, Param.NoOfStars, Param.StarMassMin, Param.StarMassMax);
+            _renderer = new Renderer2D();
         }
 
+        public bool IsSimulationRunning => _isSimulationRunning;
         public Renderer2D GetRenderer => _renderer;
+        public Space2D GetSpace => _space;
 
-        public Task[] Run()
+        public void RenderSpace(Graphics graphics)
         {
-            _isSimulationRunning = true;
-            Task PhysicsTask = new Task(CalculateSpace);
-            Task RenderingTask = new Task(RenderSpace);
-
-            PhysicsTask.Start();
-            RenderingTask.Start();
-
-            return [PhysicsTask, RenderingTask];
-        }
-        public void Stop()
-        {
-            _isSimulationRunning = false;
-        }
-        private void RenderSpace()
-        {
-            while (_isSimulationRunning)
-            {
-                ClearGraphics();
-                RenderStars();
-                _renderView.RefreshRender();
-            }
+            ClearGraphics();
+            RenderStars();
 
             // Local functions
             void ClearGraphics()
             {
-                _renderer.ClearGraphics();
+                _renderer.ClearGraphics(graphics);
             }
             void RenderStars()
             {
                 foreach (Star2D s in _space.Stars)
                 {
-                    _renderer.RenderPointFromVector(s.PositionVector);
+                    _renderer.RenderPointFromVector(graphics, s.PositionVector);
                 }
             }
+        }
+        public Task Run()
+        {
+            _isSimulationRunning = true;
+            Task PhysicsTask = new Task(CalculateSpace);
+            PhysicsTask.Start();
+
+            return PhysicsTask;
+        }
+        public void Stop()
+        {
+            _isSimulationRunning = false;
         }
         private void CalculateSpace()
         {
@@ -64,19 +61,18 @@ namespace UI
                 _space.SimulationStepForward();
             }
         }
-        private Space2D InitializeSpace()
+        private IRenderView InitializeRenderView(IRenderView renderView, int width, int height)
         {
-            return new Space2D();
+            renderView.SetSize(width, height);
+            return renderView;
         }
-        private IRenderView InitializeRenderView(IRenderView renderView)
+        private Space2D InitializeSpace(int width, int height, int noOfStars, float massMin, float massMax)
         {
-            _renderView = renderView;
-            _renderView.SetSize(_space.Width, _space.Height);
-            return _renderView;
+            Space2D space = new Space2D(width, height);
+            float rnd = (float)noOfStars / (width * height);
+            space.GenerateStars((float)noOfStars/(width*height), massMin, massMax);
+            return space;
         }
-        private Renderer2D InitializeRenderer(Graphics graphics)
-        {
-            return new Renderer2D(graphics, _space.Width, _space.Height);
-        }
+
     }
 }
