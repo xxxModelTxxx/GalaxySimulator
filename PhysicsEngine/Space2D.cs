@@ -6,11 +6,10 @@ namespace PhysicsEngine
     /// <summary>
     /// Represents 2D space (universe)
     /// </summary>
-    public class Space2D
+    public class Space2D: ICloneable
     {
         private Size                _size;
         private List<Star2D>        _stars;
-        // private Queue<List<Star2D>> _starsOutputBuffer;
 
         /// <summary>
         /// Class constructor.
@@ -22,6 +21,22 @@ namespace PhysicsEngine
         {
             _size = new Size(width, height);
             _stars = new List<Star2D>();
+        }
+
+        // Implementation of ICloneable interface
+        /// <summary>
+        /// Creates deep copy of Space2D
+        /// </summary>
+        /// <returns>object representing clone of Space2D object</returns>
+        public object Clone()
+        {
+            Space2D clone = new Space2D(0, 0);
+            clone._size = this._size;
+            foreach(Star2D s in this._stars)
+            {
+                clone._stars.Add((Star2D)s.Clone());
+            }
+            return clone;
         }
 
         /// <summary>
@@ -95,7 +110,6 @@ namespace PhysicsEngine
         {
             CalculateGravitationalForces();
             UpdateSimulationState();
-
 
             // Local functions
             void CalculateGravitationalForces()

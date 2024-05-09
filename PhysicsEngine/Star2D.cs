@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System.ComponentModel;
+using System.Drawing;
 using System.Numerics;
 
 namespace PhysicsEngine
@@ -6,7 +7,7 @@ namespace PhysicsEngine
     /// <summary>
     /// Represents single star in 2D space.
     /// </summary>
-    public class Star2D
+    public class Star2D: ICloneable
     {
         public const float  DefaultStarMassMin = 0.1f;
         public const float  DefaultStarMassMax = 1.0f;
@@ -24,7 +25,7 @@ namespace PhysicsEngine
         /// <param name="x">Position X coordinate</param>
         /// <param name="y">Position Y coordinate</param>
         /// <param name="mass">Mass</param>
-        public Star2D(int x, int y, float mass = DefaultStarMassMax)
+        public Star2D(int x, int y, float mass)
         {
             _accelerationVector = Vector2.Zero;
             _forceVector = Vector2.Zero;
@@ -33,7 +34,22 @@ namespace PhysicsEngine
             _velocityVector = Vector2.Zero;
             _positionVector = new Vector2(x, y);
         }
-
+        // Implementation of ICloneable interface
+        /// <summary>
+        /// Creates deep copy of Star2D
+        /// </summary>
+        /// <returns>object representing clone of Star2D object</returns>
+        public object Clone()
+        {
+            Star2D clone = new Star2D(0, 0, 0);
+            clone._accelerationVector = this._accelerationVector;
+            clone._forceVector = this._forceVector;
+            clone._massRest = this._massRest;
+            clone._massRelativistic = this._massRelativistic;
+            clone._velocityVector = this._velocityVector;
+            clone._positionVector = this._positionVector;
+            return clone;
+        }
 
         /// <summary>
         /// Returns acceleration vector.

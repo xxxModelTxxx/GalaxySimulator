@@ -9,6 +9,7 @@ namespace UI
     {
         private bool _isSimulationRunning;
         private Space2D _space;
+        private Queue<Space2D> _spaceBuffer;
         private IRenderView _renderView;
         private Renderer2D _renderer;
 
@@ -17,6 +18,7 @@ namespace UI
             _isSimulationRunning = false;
             _renderView = InitializeRenderView(renderView, Param.SpaceWidth, Param.SpaceHeight);
             _space = InitializeSpace(Param.SpaceWidth, Param.SpaceHeight, Param.NoOfStars, Param.StarMassMin, Param.StarMassMax);
+            _spaceBuffer = new Queue<Space2D>(Param.SpaceBufferSize);
             _renderer = new Renderer2D();
         }
 
@@ -42,13 +44,14 @@ namespace UI
                 }
             }
         }
-        public Task Run()
+        public async Task Run()
         {
             _isSimulationRunning = true;
+            // rozpocznij task renderowania
+            // rozpocznij task rysowania
+            Task RenderingTask = new Task(RenderSpace);
             Task PhysicsTask = new Task(CalculateSpace);
             PhysicsTask.Start();
-
-            return PhysicsTask;
         }
         public void Stop()
         {
