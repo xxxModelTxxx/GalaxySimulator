@@ -6,7 +6,7 @@
     public static class PhysicalConstants
     {
         private const float     DefaultGravityConstant = 1;
-        private const float     DefaultLightSpeed = 100;
+        private const float     DefaultLightSpeed = 1;
         private const float     DefaultTimeStep = 1;
         private const int       ModificationMultiplier = 10;
 

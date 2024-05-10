@@ -106,10 +106,12 @@ namespace PhysicsEngine
         /// <summary>
         /// Calculates next step of the simulation state.
         /// </summary>
-        public void SimulationStepForward()
+        public Space2D SimulationStepForward()
         {
             CalculateGravitationalForces();
             UpdateSimulationState();
+
+            return this;
 
             // Local functions
             void CalculateGravitationalForces()

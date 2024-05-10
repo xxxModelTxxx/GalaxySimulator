@@ -9,9 +9,6 @@ namespace PhysicsEngine
     /// </summary>
     public class Star2D: ICloneable
     {
-        public const float  DefaultStarMassMin = 0.1f;
-        public const float  DefaultStarMassMax = 1.0f;
-
         private Vector2     _accelerationVector;
         private Vector2     _forceVector;
         private float       _massRest;

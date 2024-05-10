@@ -9,7 +9,6 @@ namespace UI
     {
         private bool _isSimulationRunning;
         private Space2D _space;
-        private Queue<Space2D> _spaceBuffer;
         private IRenderView _renderView;
         private Renderer2D _renderer;
 
@@ -18,7 +17,6 @@ namespace UI
             _isSimulationRunning = false;
             _renderView = InitializeRenderView(renderView, Param.SpaceWidth, Param.SpaceHeight);
             _space = InitializeSpace(Param.SpaceWidth, Param.SpaceHeight, Param.NoOfStars, Param.StarMassMin, Param.StarMassMax);
-            _spaceBuffer = new Queue<Space2D>(Param.SpaceBufferSize);
             _renderer = new Renderer2D();
         }
 
@@ -30,8 +28,6 @@ namespace UI
         {
             ClearGraphics();
             RenderStars();
-
-            // Local functions
             void ClearGraphics()
             {
                 _renderer.ClearGraphics(graphics);
@@ -44,14 +40,15 @@ namespace UI
                 }
             }
         }
-        public async Task Run()
+        public async void Run()
         {
             _isSimulationRunning = true;
-            // rozpocznij task renderowania
-            // rozpocznij task rysowania
-            Task RenderingTask = new Task(RenderSpace);
-            Task PhysicsTask = new Task(CalculateSpace);
-            PhysicsTask.Start();
+            while (_isSimulationRunning)
+            {
+                CalculateSpace();
+                _renderView.RefreshRender();
+                await Task.Delay(1000 / Param.RenderingFramesPerSecond);
+            }
         }
         public void Stop()
         {
@@ -59,10 +56,11 @@ namespace UI
         }
         private void CalculateSpace()
         {
-            while (_isSimulationRunning)
-            {
-                _space.SimulationStepForward();
-            }
+                Task.Run(() => _space.SimulationStepForward());
+        }
+        private void Timer()
+        {
+            Task.Delay(1000 / Param.RenderingFramesPerSecond);
         }
         private IRenderView InitializeRenderView(IRenderView renderView, int width, int height)
         {

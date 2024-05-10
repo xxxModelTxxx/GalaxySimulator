@@ -10,7 +10,7 @@ namespace UI
         Space2D GetSpace { get; }
 
         void RenderSpace(Graphics graphics);
-        Task Run();
+        void Run();
         void Stop();
     }
 }
