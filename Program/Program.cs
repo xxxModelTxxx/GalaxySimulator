@@ -16,9 +16,11 @@ namespace Program
             ApplicationConfiguration.Initialize();
 
             // MVP binding /////////////////////////////////////////////////////
+            ControlView controlView = new ControlView();
             RenderView renderView = new RenderView();
             ////////////////////////////////////////////////////////////////////
 
+            controlView.Visible = true;
             Application.Run(renderView);
         }
     }

@@ -5,29 +5,85 @@
     /// </summary>
     public static class PhysicalConstants
     {
-        private const float     DefaultGravityConstant = 1;
-        private const float     DefaultLightSpeed = 1;
-        private const float     DefaultTimeStep = 1;
+        private const float     DefaultGravityConstant = 10.01f;
+        private const float     DefaultLightSpeed = 10.01f;
+        private const float     DefaultTimeStep = 0.01f;
+        private const float     DefaultNearLightSpeedRatio = 0.91f;
         private const int       ModificationMultiplier = 10;
 
         private static float    _gravityConstant;
         private static float    _lightSpeed;
+        private static float    _nearLightSpeedRatio;
         private static float    _timeStep;
 
         /// <summary>
         /// Returns gravity constant.
         /// </summary>
-        public static float GravityConstant => _gravityConstant;
+        public static float GravityConstant
+        {
+            get
+            {
+                return _gravityConstant;
+            }
+            set
+            {
+                _gravityConstant = (float)value;
+            }
+        }
         /// <summary>
         /// Returns speed of light value;
         /// </summary>
-        public static float LightSpeed => _lightSpeed;
-
+        public static float LightSpeed
+        {
+            get
+            {
+                return _lightSpeed;
+            }
+            set
+            {
+                _lightSpeed = (float) value;
+            }
+        }
+        /// <summary>
+        /// Returns maximum allowable speed;
+        /// </summary>
+        public static float NearLightSpeed => _lightSpeed * NearLightSpeedRatio;
+        /// <summary>
+        /// Returns near light speed ratio
+        /// Near light speed ratio determines maximum allowable speed of star in simulation.
+        /// </summary>
+        public static float NearLightSpeedRatio
+        {
+            get
+            {
+                return _nearLightSpeedRatio;
+            }
+            set
+            {
+                if (value >= 1.0f || value <= 0)
+                {
+                    _nearLightSpeedRatio = DefaultNearLightSpeedRatio;
+                }
+                else
+                {
+                    _nearLightSpeedRatio = (float) value;
+                }
+            }
+        }
         /// <summary>
         /// Returns time length of single simulation step.
         /// </summary>
-        public static float TimeStep => _timeStep;
-
+        public static float TimeStep
+        {
+            get
+            {
+                return _timeStep;
+            }
+            set
+            {
+                _timeStep = (float) value;
+            }
+        }
         /// <summary>
         /// Class static constructor.
         /// </summary>
@@ -35,6 +91,7 @@
         {
             _gravityConstant = DefaultGravityConstant;
             _lightSpeed = DefaultLightSpeed;
+            _nearLightSpeedRatio = DefaultNearLightSpeedRatio;
             _timeStep = DefaultTimeStep;
         }
 

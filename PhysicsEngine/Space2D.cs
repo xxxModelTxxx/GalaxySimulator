@@ -129,18 +129,12 @@ namespace PhysicsEngine
 
                     foreach (Star2D star2 in _stars)
                     {
-                        try
-                        {
-                            fIndividual = CalculateGravitationalForceVector(star1, star2);
-                        }
-                        catch
+                        fIndividual = CalculateGravitationalForceVector(star1, star2);
+                        if (IsVector2NaN(fIndividual))
                         {
                             fIndividual = Vector2.Zero;
                         }
-                        finally
-                        {
-                            fResultant += fIndividual;
-                        }
+                        fResultant += fIndividual;
                     }
 
                     return fResultant;
@@ -165,9 +159,14 @@ namespace PhysicsEngine
             {
                 foreach (Star2D star in _stars)
                 {
-                    star.UpdateState(PhysicalConstants.TimeStep, PhysicalConstants.LightSpeed);
+                    star.UpdateState(PhysicalConstants.TimeStep, PhysicalConstants.LightSpeed, _size);
                 }
             }
+        }
+
+        private bool IsVector2NaN(Vector2 vector)
+        {
+            return (System.Single.IsNaN(vector.X) || System.Single.IsNaN(vector.X));
         }
     }
 }

@@ -47,7 +47,8 @@ namespace UI
             {
                 CalculateSpace();
                 _renderView.RefreshRender();
-                await Task.Delay(1000 / Param.RenderingFramesPerSecond);
+                //await Task.Delay(1000 / Param.RenderingFramesPerSecond);
+                await Task.Delay(10);
             }
         }
         public void Stop()
@@ -74,6 +75,5 @@ namespace UI
             space.GenerateStars((float)noOfStars/(width*height), massMin, massMax);
             return space;
         }
-
     }
 }

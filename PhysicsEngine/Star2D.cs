@@ -92,7 +92,7 @@ namespace PhysicsEngine
         /// </summary>
         /// <param name="time">Time of force application.</param>
         /// <param name="lightSpeed">Value of light speed.</param>
-        public void UpdateState(float time, float lightSpeed)
+        public void UpdateState(float time, float lightSpeed, Size size)
         {
             _accelerationVector = CalculateAccelerationVector();
             _positionVector = CalculatePositionVector();
@@ -105,15 +105,39 @@ namespace PhysicsEngine
                 // a = F/m
                 return _forceVector / _massRelativistic;
             }
-            Vector2 CalculatePositionVector()
-            {
-                // V = XY + V0t + 0.5at^2
-                return _positionVector + (_velocityVector * time) + (_accelerationVector * (0.5f * (float)Math.Pow(time, 2)));
-            }
             Vector2 CalculateVelocityVector()
             {
                 // V = V0 + at
-                return _velocityVector + (_accelerationVector * time);
+                Vector2 result = _velocityVector + (_accelerationVector * time);
+                if (result.Length() >= lightSpeed)
+                {
+                    result = Vector2.Normalize(result) * PhysicalConstants.NearLightSpeed;
+                }
+                return result;
+            }
+            Vector2 CalculatePositionVector()
+            {
+                // V = XY + V0t + 0.5at^2
+                //Vector2 result = _positionVector + (_velocityVector * time) + (_accelerationVector * (0.5f * (float)Math.Pow(time, 2)));
+                // V = XY + Vt
+                Vector2 result = _positionVector + (_velocityVector * time);
+                while (result.X > size.Width)
+                {
+                    result.X -= size.Width;
+                }
+                while (result.X < 0)
+                {
+                    result.X += size.Width;
+                }
+                while (result.Y > size.Height)
+                {
+                    result.Y -= size.Height;
+                }
+                while (result.Y < 0)
+                {
+                    result.Y += size.Height;
+                }
+                return result;
             }
         }
         /// <summary>
